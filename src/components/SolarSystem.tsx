@@ -15,7 +15,6 @@ const CelestialBody = ({
   emissiveIntensity,
   orbitalRadius = 0,
   orbitalSpeed = 0,
-  cameraControlsRef,
   setSelectedObject,
   children,
   rings,
@@ -45,7 +44,7 @@ const CelestialBody = ({
         if (name === 'Sun') {
             resetCamera();
         } else {
-            if (!groupRef.current || !cameraControlsRef.current) return;
+            if (!groupRef.current) return;
             setSelectedObject({ name, mesh: meshRef.current, size });
         }
     };
@@ -71,7 +70,7 @@ const CelestialBody = ({
                 );
             })}
             {React.Children.map(children, child =>
-                React.cloneElement(child, { setSelectedObject, cameraControlsRef, resetCamera })
+                React.cloneElement(child, { setSelectedObject, resetCamera })
             )}
         </group>
     );
@@ -105,12 +104,62 @@ const AsteroidBelt = () => {
     );
 };
 
+const Scene = ({ cameraControlsRef, selectedObject, setSelectedObject, resetCamera }) => {
+    const saturnRings = [
+      { radius: 3, tube: 0.4, texturePath: '/textures/saturn_ring.png' },
+    ];
+
+    useFrame(() => {
+      if (selectedObject && selectedObject.mesh && cameraControlsRef.current) {
+          const position = new THREE.Vector3();
+          selectedObject.mesh.getWorldPosition(position);
+
+          const distance = selectedObject.size * (selectedObject.name === 'Sun' ? 4 : 5);
+
+          cameraControlsRef.current.setLookAt(
+              position.x + distance,
+              position.y + distance / 2,
+              position.z + distance,
+              position.x,
+              position.y,
+              position.z,
+              false
+          );
+      }
+    });
+
+    return (
+      <>
+        <ambientLight intensity={0.1} />
+        <pointLight position={[0, 0, 0]} intensity={300} decay={2} />
+        <CelestialBody name="Sun" texturePath="/textures/sun.jpg" size={2.5} emissive="yellow" emissiveIntensity={2} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CelestialBody name="Mercury" texturePath="/textures/mercury.jpg" size={0.38} orbitalRadius={5} orbitalSpeed={0.4} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CelestialBody name="Venus" texturePath="/textures/venus.jpg" size={0.95} orbitalRadius={8} orbitalSpeed={0.3} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CelestialBody name="Earth" texturePath="/textures/earth.jpg" size={1} orbitalRadius={12} orbitalSpeed={0.2} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
+            <CelestialBody name="Moon" texturePath="/textures/moon.jpg" size={0.27} orbitalRadius={1.5} orbitalSpeed={2} />
+        </CelestialBody>
+        <CelestialBody name="Mars" texturePath="/textures/mars.jpg" size={0.53} orbitalRadius={18} orbitalSpeed={0.15} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
+            <CelestialBody name="Phobos" texturePath="/textures/moon.jpg" size={0.1} orbitalRadius={1} orbitalSpeed={2.5} />
+            <CelestialBody name="Deimos" texturePath="/textures/moon.jpg" size={0.08} orbitalRadius={1.2} orbitalSpeed={3} />
+        </CelestialBody>
+        <AsteroidBelt />
+        <CelestialBody name="Jupiter" texturePath="/textures/jupiter.jpg" size={2.5} orbitalRadius={25} orbitalSpeed={0.08} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
+            <CelestialBody name="Io" texturePath="/textures/moon.jpg" size={0.4} orbitalRadius={3} orbitalSpeed={1.5} />
+            <CelestialBody name="Europa" texturePath="/textures/moon.jpg" size={0.3} orbitalRadius={3.5} orbitalSpeed={1.8} />
+            <CelestialBody name="Ganymede" texturePath="/textures/moon.jpg" size={0.35} orbitalRadius={4} orbitalSpeed={1.2} />
+            <CelestialBody name="Callisto" texturePath="/textures/moon.jpg" size={0.2} orbitalRadius={4.5} orbitalSpeed={2} />
+        </CelestialBody>
+        <CelestialBody name="Saturn" texturePath="/textures/saturn.jpg" size={2.1} orbitalRadius={35} orbitalSpeed={0.05} rings={saturnRings} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CelestialBody name="Uranus" texturePath="/textures/uranus.jpg" size={1.5} orbitalRadius={45} orbitalSpeed={0.03} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CelestialBody name="Neptune" texturePath="/textures/neptune.jpg" size={1.4} orbitalRadius={55} orbitalSpeed={0.02} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <CameraControls ref={cameraControlsRef} />
+      </>
+    );
+  };
+
 export default function SolarSystem() {
   const cameraControlsRef = useRef<CameraControls>(null!);
   const [selectedObject, setSelectedObject] = useState(null);
-  const saturnRings = [
-    { radius: 3, tube: 0.4, texturePath: '/textures/saturn_ring.png' },
-  ];
 
   const resetCamera = () => {
     if (cameraControlsRef.current) {
@@ -119,52 +168,16 @@ export default function SolarSystem() {
     }
   };
 
-  useFrame(() => {
-    if (selectedObject && selectedObject.mesh && cameraControlsRef.current) {
-        const position = new THREE.Vector3();
-        selectedObject.mesh.getWorldPosition(position);
-
-        const distance = selectedObject.size * (selectedObject.name === 'Sun' ? 4 : 5);
-
-        cameraControlsRef.current.setLookAt(
-            position.x + distance,
-            position.y + distance / 2,
-            position.z + distance,
-            position.x,
-            position.y,
-            position.z,
-            false // Do not enable transition, so it happens instantly
-        );
-    }
-  });
-
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundColor: 'black' }}>
       <InfoPanel selectedObject={selectedObject} resetCamera={resetCamera} />
       <Canvas camera={{ position: [0, 60, 100], fov: 45 }}>
-        <ambientLight intensity={0.1} />
-        <pointLight position={[0, 0, 0]} intensity={300} decay={2} />
-        <CelestialBody name="Sun" texturePath="/textures/sun.jpg" size={2.5} emissive="yellow" emissiveIntensity={2} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CelestialBody name="Mercury" texturePath="/textures/mercury.jpg" size={0.38} orbitalRadius={5} orbitalSpeed={0.4} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CelestialBody name="Venus" texturePath="/textures/venus.jpg" size={0.95} orbitalRadius={8} orbitalSpeed={0.3} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CelestialBody name="Earth" texturePath="/textures/earth.jpg" size={1} orbitalRadius={12} orbitalSpeed={0.2} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
-            <CelestialBody name="Moon" texturePath="/textures/moon.jpg" size={0.27} orbitalRadius={1.5} orbitalSpeed={2} />
-        </CelestialBody>
-        <CelestialBody name="Mars" texturePath="/textures/mars.jpg" size={0.53} orbitalRadius={18} orbitalSpeed={0.15} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
-            <CelestialBody name="Phobos" texturePath="/textures/moon.jpg" size={0.1} orbitalRadius={1} orbitalSpeed={2.5} />
-            <CelestialBody name="Deimos" texturePath="/textures/moon.jpg" size={0.08} orbitalRadius={1.2} orbitalSpeed={3} />
-        </CelestialBody>
-        <AsteroidBelt />
-        <CelestialBody name="Jupiter" texturePath="/textures/jupiter.jpg" size={2.5} orbitalRadius={25} orbitalSpeed={0.08} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
-            <CelestialBody name="Io" texturePath="/textures/moon.jpg" size={0.4} orbitalRadius={3} orbitalSpeed={1.5} />
-            <CelestialBody name="Europa" texturePath="/textures/moon.jpg" size={0.3} orbitalRadius={3.5} orbitalSpeed={1.8} />
-            <CelestialBody name="Ganymede" texturePath="/textures/moon.jpg" size={0.35} orbitalRadius={4} orbitalSpeed={1.2} />
-            <CelestialBody name="Callisto" texturePath="/textures/moon.jpg" size={0.2} orbitalRadius={4.5} orbitalSpeed={2} />
-        </CelestialBody>
-        <CelestialBody name="Saturn" texturePath="/textures/saturn.jpg" size={2.1} orbitalRadius={35} orbitalSpeed={0.05} rings={saturnRings} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CelestialBody name="Uranus" texturePath="/textures/uranus.jpg" size={1.5} orbitalRadius={45} orbitalSpeed={0.03} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CelestialBody name="Neptune" texturePath="/textures/neptune.jpg" size={1.4} orbitalRadius={55} orbitalSpeed={0.02} cameraControlsRef={cameraControlsRef} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
-        <CameraControls ref={cameraControlsRef} />
+        <Scene
+            cameraControlsRef={cameraControlsRef}
+            selectedObject={selectedObject}
+            setSelectedObject={setSelectedObject}
+            resetCamera={resetCamera}
+        />
       </Canvas>
     </div>
   );
