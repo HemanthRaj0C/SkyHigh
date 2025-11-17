@@ -6,6 +6,26 @@ import React, { useRef, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import InfoPanel from './InfoPanel';
 
+const Orbit = ({ radius }) => {
+    const points = useMemo(() => {
+        const points = [];
+        for (let i = 0; i <= 360; i++) {
+            const x = radius * Math.sin(THREE.MathUtils.degToRad(i));
+            const z = radius * Math.cos(THREE.MathUtils.degToRad(i));
+            points.push(new THREE.Vector3(x, 0, z));
+        }
+        return points;
+    }, [radius]);
+
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    return (
+        <line geometry={lineGeometry}>
+            <lineBasicMaterial color="#333" />
+        </line>
+    );
+};
+
 const CelestialBody = ({
   name,
   texturePath,
@@ -69,9 +89,7 @@ const CelestialBody = ({
                     </mesh>
                 );
             })}
-            {React.Children.map(children, child =>
-                React.cloneElement(child, { setSelectedObject, resetCamera })
-            )}
+            {children}
         </group>
     );
 };
@@ -133,25 +151,43 @@ const Scene = ({ cameraControlsRef, selectedObject, setSelectedObject, resetCame
         <ambientLight intensity={0.1} />
         <pointLight position={[0, 0, 0]} intensity={300} decay={2} />
         <CelestialBody name="Sun" texturePath="/textures/sun.jpg" size={2.5} emissive="yellow" emissiveIntensity={2} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+
         <CelestialBody name="Mercury" texturePath="/textures/mercury.jpg" size={0.38} orbitalRadius={5} orbitalSpeed={0.4} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <Orbit radius={5} />
+
         <CelestialBody name="Venus" texturePath="/textures/venus.jpg" size={0.95} orbitalRadius={8} orbitalSpeed={0.3} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <Orbit radius={8} />
+
         <CelestialBody name="Earth" texturePath="/textures/earth.jpg" size={1} orbitalRadius={12} orbitalSpeed={0.2} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
             <CelestialBody name="Moon" texturePath="/textures/moon.jpg" size={0.27} orbitalRadius={1.5} orbitalSpeed={2} />
         </CelestialBody>
+        <Orbit radius={12} />
+
         <CelestialBody name="Mars" texturePath="/textures/mars.jpg" size={0.53} orbitalRadius={18} orbitalSpeed={0.15} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
             <CelestialBody name="Phobos" texturePath="/textures/moon.jpg" size={0.1} orbitalRadius={1} orbitalSpeed={2.5} />
             <CelestialBody name="Deimos" texturePath="/textures/moon.jpg" size={0.08} orbitalRadius={1.2} orbitalSpeed={3} />
         </CelestialBody>
+        <Orbit radius={18} />
+
         <AsteroidBelt />
+
         <CelestialBody name="Jupiter" texturePath="/textures/jupiter.jpg" size={2.5} orbitalRadius={25} orbitalSpeed={0.08} setSelectedObject={setSelectedObject} resetCamera={resetCamera}>
             <CelestialBody name="Io" texturePath="/textures/moon.jpg" size={0.4} orbitalRadius={3} orbitalSpeed={1.5} />
             <CelestialBody name="Europa" texturePath="/textures/moon.jpg" size={0.3} orbitalRadius={3.5} orbitalSpeed={1.8} />
             <CelestialBody name="Ganymede" texturePath="/textures/moon.jpg" size={0.35} orbitalRadius={4} orbitalSpeed={1.2} />
             <CelestialBody name="Callisto" texturePath="/textures/moon.jpg" size={0.2} orbitalRadius={4.5} orbitalSpeed={2} />
         </CelestialBody>
+        <Orbit radius={25} />
+
         <CelestialBody name="Saturn" texturePath="/textures/saturn.jpg" size={2.1} orbitalRadius={35} orbitalSpeed={0.05} rings={saturnRings} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <Orbit radius={35} />
+
         <CelestialBody name="Uranus" texturePath="/textures/uranus.jpg" size={1.5} orbitalRadius={45} orbitalSpeed={0.03} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <Orbit radius={45} />
+
         <CelestialBody name="Neptune" texturePath="/textures/neptune.jpg" size={1.4} orbitalRadius={55} orbitalSpeed={0.02} setSelectedObject={setSelectedObject} resetCamera={resetCamera} />
+        <Orbit radius={55} />
+
         <CameraControls ref={cameraControlsRef} />
       </>
     );

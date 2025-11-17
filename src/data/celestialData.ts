@@ -1,0 +1,98 @@
+export const celestialData = {
+    Sun: {
+      name: 'Sun',
+      description: 'The Sun is the star at the center of the Solar System. It is a nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core.',
+      distanceFromSun: '0 km',
+      radius: '696,340 km',
+    },
+    Mercury: {
+      name: 'Mercury',
+      description: 'Mercury is the smallest planet in the Solar System and the closest to the Sun. Its orbit takes 87.97 Earth days, the shortest of all the Sun\'s planets.',
+      distanceFromSun: '57.9 million km',
+      radius: '2,439.7 km',
+    },
+    Venus: {
+      name: 'Venus',
+      description: 'Venus is the second planet from the Sun. It is named after the Roman goddess of love and beauty. As the brightest natural object in Earth\'s night sky after the Moon, Venus can cast shadows and can be, on rare occasions, visible to the naked eye in broad daylight.',
+      distanceFromSun: '108.2 million km',
+      radius: '6,051.8 km',
+    },
+    Earth: {
+      name: 'Earth',
+      description: 'Earth is the third planet from the Sun and the only astronomical object known to harbor life. About 29.2% of Earth\'s surface is land consisting of continents and islands.',
+      distanceFromSun: '149.6 million km',
+      radius: '6,371 km',
+    },
+    Moon: {
+        name: 'Moon',
+        description: 'The Moon is Earth\'s only natural satellite. It is the fifth largest satellite in the Solar System, and the largest among planetary satellites relative to the size of the planet that it orbits.',
+        distanceFromSun: 'N/A (orbits Earth)',
+        radius: '1,737.4 km',
+    },
+    Mars: {
+      name: 'Mars',
+      description: 'Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System, being larger than only Mercury. In English, Mars carries the name of the Roman god of war and is often referred to as the "Red Planet".',
+      distanceFromSun: '227.9 million km',
+      radius: '3,389.5 km',
+    },
+    Phobos: {
+        name: 'Phobos',
+        description: 'Phobos is the larger and innermost of the two natural satellites of Mars, the other being Deimos. Both moons were discovered in 1877 by American astronomer Asaph Hall.',
+        distanceFromSun: 'N/A (orbits Mars)',
+        radius: '11.267 km',
+    },
+    Deimos: {
+        name: 'Deimos',
+        description: 'Deimos is the smaller and outermost of the two natural satellites of Mars. Deimos has a mean radius of 6.2 km (3.9 mi) and takes 30.3 hours to orbit Mars.',
+        distanceFromSun: 'N/A (orbits Mars)',
+        radius: '6.2 km',
+    },
+    Jupiter: {
+      name: 'Jupiter',
+      description: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a gas giant with a mass more than two and a half times that of all the other planets in the Solar System combined, but slightly less than one-thousandth the mass of the Sun.',
+      distanceFromSun: '778.5 million km',
+      radius: '69,911 km',
+    },
+    Io: {
+        name: 'Io',
+        description: 'Io is the innermost and third-largest of the four Galilean moons of the planet Jupiter. It is the fourth-largest moon in the Solar System, has the highest density of all of them, and has the least amount of water of any known astronomical object in the Solar System.',
+        distanceFromSun: 'N/A (orbits Jupiter)',
+        radius: '1,821.6 km',
+    },
+    Europa: {
+        name: 'Europa',
+        description: 'Europa is the smallest of the four Galilean moons orbiting Jupiter, and the sixth-closest to the planet of all the 79 known moons of Jupiter. It is also the sixth-largest moon in the Solar System.',
+        distanceFromSun: 'N/A (orbits Jupiter)',
+        radius: '1,560.8 km',
+    },
+    Ganymede: {
+        name: 'Ganymede',
+        description: 'Ganymede, a satellite of Jupiter, is the largest and most massive of the Solar System\'s moons. The ninth-largest object in the Solar System, it is the largest without a substantial atmosphere.',
+        distanceFromSun: 'N/A (orbits Jupiter)',
+        radius: '2,634.1 km',
+    },
+    Callisto: {
+        name: 'Callisto',
+        description: 'Callisto is the second-largest moon of Jupiter, after Ganymede. It is the third-largest moon in the Solar System after Ganymede and Saturn\'s largest moon Titan, and the largest object in the Solar System that may not be properly differentiated.',
+        distanceFromSun: 'N/A (orbits Jupiter)',
+        radius: '2,410.3 km',
+    },
+    Saturn: {
+      name: 'Saturn',
+      description: 'Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius of about nine times that of Earth. It only has one-eighth the average density of Earth; however, with its larger volume, Saturn is over 95 times more massive.',
+      distanceFromSun: '1.434 billion km',
+      radius: '58,232 km',
+    },
+    Uranus: {
+      name: 'Uranus',
+      description: 'Uranus is the seventh planet from the Sun. It has the third-largest planetary radius and fourth-largest planetary mass in the Solar System. Uranus is similar in composition to Neptune, and both have bulk chemical compositions which differ from that of the larger gas giants Jupiter and Saturn.',
+      distanceFromSun: '2.871 billion km',
+      radius: '25,362 km',
+    },
+    Neptune: {
+      name: 'Neptune',
+      description: 'Neptune is the eighth and farthest-known Solar planet from the Sun. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet. It is 17 times the mass of Earth, slightly more massive than its near-twin Uranus.',
+      distanceFromSun: '4.495 billion km',
+      radius: '24,622 km',
+    },
+  };
